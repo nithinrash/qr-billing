@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Send Email</title>
+    <!-- Include the SMTP.js library -->
+    <script src="https://smtpjs.com/v3/smtp.js"></script>
+</head>
+<body>
+
+    <h1>Send Email using JavaScript</h1>
+    <form method="post">
+        <input type="button" value="Send Email" onclick="sendEmail()" />
+    </form>
+
+    <script type="text/javascript">
+        function sendEmail() {
+            Email.send({
+                Host: "smtp.gmail.com",
+                Username: "nkrash91@gmail.com", // Replace with your email address
+                Password: "xkiz ingm zdmu oywd",  // Replace with your email password
+                To: 'nithinrash4@gmail.com',      // Replace with recipient's email address
+                From: "alertcollege00@gmail.com",     // Replace with your email address
+                Subject: "Test Email",
+                Body: "This is a test email sent using SMTP.js"
+            })
+            .then(function (message) {
+                alert("Mail sent successfully");
+            });
+        }
+    </script>
+
+</body>
+</html>

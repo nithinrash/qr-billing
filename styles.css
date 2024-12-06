@@ -1,0 +1,44 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #2e2e2e;
+    margin: 0;
+}
+
+.parking-lot {
+    display: grid;
+    grid-template-columns: repeat(2, 100px);
+    grid-gap: 10px;
+}
+
+.slot {
+    width: 100px;
+    height: 200px;
+    border: 2px solid #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.car-image {
+    width: 150px; /* Adjusted to fit better */
+    height: auto; /* Maintain aspect ratio */
+}
+
+.slot.empty {
+    background-color: rgba(0, 255, 13, 0.1); /* Transparent red */
+    font-size: 24px;
+    font-weight: bold;
+}
+.slot {
+    margin: 5px;
+    padding: 10px;
+  }
+  
+  .booked {
+    background-color: rgba(255, 255, 0, 0.329); /* Transparent yellow */
+    font-size: 24px;
+    font-weight: bold;
+  }
