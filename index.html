@@ -1,28 +1,35 @@
-<!-- Index.html file -->
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet"
-          href="qr.css">
-    <title>QR Code Scanner / Reader
-    </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="qr.css">
+    <title>Payment Gateway</title>
 </head>
 
 <body>
-    <div class="container">
-        <h1>Scan QR Codes</h1>
-        <div class="section">
-            <div id="my-qr-reader">
-            </div>
+    <div class="payment-container">
+        <!-- Payment Header -->
+        <header class="payment-header">
+            <h1>Secure Payment</h1>
+            <p>Scan the QR code to proceed with the payment.</p>
+        </header>
+
+        <!-- QR Code Scanner Section -->
+        <div class="qr-section">
+            <div id="my-qr-reader"></div>
         </div>
+
+        <!-- Payment Footer -->
+        <footer class="payment-footer">
+            <p>Powered by <strong>Your Company</strong></p>
+            <small>&copy; 2024 All Rights Reserved</small>
+        </footer>
     </div>
-    <script
-        src="https://unpkg.com/html5-qrcode">
-    </script>
+
+    <!-- QR Code Scanner Scripts -->
+    <script src="https://unpkg.com/html5-qrcode"></script>
     <script src="qr.js"></script>
 </body>
 
