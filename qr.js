@@ -17,8 +17,7 @@ async function fetchBangaloreTime() {
         }
         const data = await response.json();
         
-        // Extract the time part from the datetime string
-        const time = data.time; // Assuming the API returns a field named 'time' in 24-hour format
+        const time = data.time;
         return time;
     } catch (error) {
         console.error('Error fetching time:', error);
@@ -26,19 +25,15 @@ async function fetchBangaloreTime() {
     }
 }
 
-// Function to compare two times in HH:MM format
 function compareTimes(time1, time2) {
     const [hours1, minutes1] = time1.split(':').map(Number);
     const [hours2, minutes2] = time2.split(':').map(Number);
 
-    // Convert both times to total minutes since midnight
     const totalMinutes1 = hours1 * 60 + minutes1;
     const totalMinutes2 = hours2 * 60 + minutes2;
 
-    // Calculate the difference in minutes
     let differenceInMinutes = totalMinutes2 - totalMinutes1;
 
-    // If the difference is negative, adjust for a full day (24 hours)
     if (differenceInMinutes < 0) {
         differenceInMinutes += 24 * 60;
     }
@@ -59,10 +54,31 @@ function selectImageBasedOnTimeDifference(timeDifference) {
 }
 
 domReady(function () {
+    // New functions for camera toggle
+    function toggleCameraVisibility(showCamera) {
+        const qrReaderElement = document.getElementById('my-qr-reader');
+        const imageElement = document.getElementById('dynamic-image');
+        
+        if (showCamera) {
+            qrReaderElement.style.display = 'block';
+            if (imageElement) imageElement.style.display = 'none';
+        } else {
+            qrReaderElement.style.display = 'none';
+            if (imageElement) imageElement.style.display = 'block';
+        }
+    }
 
-    // Function to fetch data from Firebase Realtime Database
+    function resetScanProcess() {
+        htmlscanner.clear().then(() => {
+            htmlscanner.render(onScanSuccess);
+            toggleCameraVisibility(true);
+        }).catch(error => {
+            console.error("Error resetting scanner:", error);
+        });
+    }
+
     function fetchDataFromFirebase(sensorValue) {
-        const url = "https://smartparkingg-f7952-default-rtdb.firebaseio.com/times.json"; // Ensure .json at the end
+        const url = "https://smartparkingg-f7952-default-rtdb.firebaseio.com/times.json";
 
         fetch(url)
             .then(response => {
@@ -72,13 +88,11 @@ domReady(function () {
                 return response.json();
             })
             .then(async data => {
-                console.log("Times data:", data); // Log the fetched data
+                console.log("Times data:", data);
                 
-                // Check if sensorValue exists in the fetched data
                 if (data && sensorValue in data) {
                     console.log(`Value for ${sensorValue}:`, data[sensorValue]);
                     
-                    // Fetch current Bangalore time
                     const currentTime = await fetchBangaloreTime();
                     if (currentTime) {
                         console.log("Current Time in Bangalore:", currentTime);
@@ -88,25 +102,22 @@ domReady(function () {
                         const selectedImage = selectImageBasedOnTimeDifference(timeDifference);
                         console.log(`Selected Image: ${selectedImage}`);
 
-                        // Display the selected image in an HTML element
+                        // Hide camera, show image
+                        toggleCameraVisibility(false);
+
                         let imgElement = document.getElementById('dynamic-image');
                         if (!imgElement) {
                             imgElement = document.createElement('img');
                             imgElement.id = 'dynamic-image';
                             document.body.appendChild(imgElement);
                         }
-                        imgElement.src = `images/${selectedImage}`; // Ensure the path is correct
+                        imgElement.src = `images/${selectedImage}`;
                         imgElement.alt = `Image for ${selectedImage}`;
 
-                        // Hide QR scanner and show image
-                        let qrScannerElement = document.getElementById("my-qr-reader");
-                        qrScannerElement.style.display = "none"; // Hide QR scanner
-
-                        // Show QR scanner again after 30 seconds
+                        // Automatically reset after 15 seconds
                         setTimeout(() => {
-                            qrScannerElement.style.display = "block"; // Show QR scanner
-                            imgElement.remove(); // Remove the displayed image
-                        }, 30000); // 30 seconds delay
+                            window.location.reload();
+                        }, 15000);
                     }
                 } else {
                     console.log(`Sensor value ${sensorValue} not found in data.`);
@@ -117,24 +128,18 @@ domReady(function () {
             });
     }
 
-    // Function to extract sensorvalue from decoded text
     function extractSensorValue(decodedText) {
-        // Use a regular expression to find the sensorvalue
         const match = decodedText.match(/'sensorvalue':\s*'([^']+)'/);
         return match ? match[1] : null;
     }
 
-    // Function to handle successful QR code scans
     function onScanSuccess(decodeText, decodeResult) {
-        const qrCodeValue = decodeText;  // Store the decoded text in the variable
-        
-        // Extract and log the sensorvalue
+        const qrCodeValue = decodeText;
+
         const sensorValue = extractSensorValue(decodeText);
         
         if (sensorValue) {
-            console.log("Sensor Value:", sensorValue);  // Log the extracted sensor value
-            
-            // Fetch data from Firebase and look for the sensor value
+            console.log("Sensor Value:", sensorValue);
             fetchDataFromFirebase(sensorValue);
         } else {
             console.log("Sensor value not found in QR code.");
