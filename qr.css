@@ -7,7 +7,7 @@ body {
     height: 100vh;
     box-sizing: border-box;
     text-align: center;
-    background: rgb(128 0 0 / 66%);
+    background: rgba(255, 255, 255, 0.66);
 }
 .container {
     width: 100%;
@@ -20,11 +20,11 @@ body {
 }
 
 .section {
-    background-color: #ffffff00;
+    background-color: #ffffff;
     padding: 50px 30px;
-    border: 1.5px solid #b2b2b200;
+    border: 1.5px solid #b2b2b2;
     border-radius: 0.25em;
-    box-shadow: 0 20px 25px rgba(0, 0, 0, 0);
+    box-shadow: 0 20px 25px rgba(0, 0, 0, 0.25);
 }
 
 #my-qr-reader {
@@ -69,4 +69,37 @@ video {
     width: 100% !important;
     border: 1px solid #b2b2b2 !important;
     border-radius: 0.25em;
+}
+
+/* Styling for the dynamic image */
+#dynamic-image {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 80%; /* Responsive width */
+    max-height: 50vh; /* Height at 50% of viewport height */
+    object-fit: contain; /* Maintain aspect ratio */
+    z-index: 1000; /* Ensure it's above other elements */
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+/* Optional: Add a slight animation */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translate(-50%, -50%) scale(0.9); }
+    to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+
+#dynamic-image {
+    animation: fadeIn 0.5s ease-out;
+}
+
+/* Optional: Responsive adjustments */
+@media (max-width: 768px) {
+    #dynamic-image {
+        max-width: 90%;
+        max-height: 40vh;
+    }
 }
